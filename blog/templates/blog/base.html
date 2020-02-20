@@ -11,11 +11,24 @@
     <body>
         <div class="page-header">
             {% if user.is_authenticated %}
-                <a class="btn btn-primary" style="float: right;" href="{% url 'post_new' %}" class="top-menu">
+                <a class="float-right btn btn-primary" href="{% url 'post_draft_list' %}" class="top-menu">
+                    <span class="glyphicon glyphicon-edit"></span>
+                </a>
+
+                <span class="float-right">&nbsp;</span>
+
+                <a class="float-right btn btn-primary" href="{% url 'post_new' %}" class="top-menu">
                     <span class="glyphicon glyphicon-plus"></span>
+                </a>
+
+                <p class="top-menu"><small>Hello {{ user.username }} (<a href="{% url 'logout' %}">Log out</a>)</small></p>
+            {% else %}
+                <a href="{% url 'login' %}" class="top-menu">
+                    <span class="float-right glyphicon glyphicon-lock"></span>
                 </a>
             {% endif %}
             <h1><a href="/">Django Girls Blog</a></h1>
+        </div>
 
             <div class="content container">
                 <div class="row">
@@ -26,6 +39,5 @@
                 </div>
             </div>
 
-        </div>
     </body>
 </html>

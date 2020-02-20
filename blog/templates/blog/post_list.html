@@ -5,9 +5,16 @@
         <div class="post">
             <h2><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h2>
             {{ post.text|linebreaksbr }}
-            <div class="date">
-                [{{ post.author }}] -- published: {{ post.published_date }}
-            </div>
+
+            {% if post.published_date %}
+                <div class="date">
+                    [{{ post.author }}] -- published: {{ post.published_date }}
+                </div>
+
+                <a href="{% url 'post_detail' pk=post.pk %}">Comments: {{ post.comments.count }}</a>
+            {% else %}
+                <a class="btn btn-primary" href="{% url 'post_publish' pk=post.pk %}">Publish</a>
+            {% endif %}
         </div>
     {% endfor %}
 {% endblock %}

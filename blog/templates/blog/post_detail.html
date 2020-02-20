@@ -2,18 +2,42 @@
 
 {% block content %}
     <div class="post">
+        <h2>{{ post.title }}</h2>
+        <p>{{ post.text|linebreaksbr }}</p>
+
         {% if post.published_date %}
             <div class="date">
                 [{{ post.author }}] -- {{ post.published_date }}
             </div>
+        {% else %}
+            <a class="btn btn-primary" href="{% url 'post_publish' pk=post.pk %}">Publish</a>
+            <span class="float-right">&nbsp;</span>
         {% endif %}
-        <h2>{{ post.title }}</h2>
-        <p>{{ post.text|linebreaksbr }}</p>
 
         {% if user.is_authenticated %}
-            <a class="btn btn-primary" href="{% url 'post_edit' pk=post.pk %}">
-                <span class="glyphicon glyphicon-pencil"></span>
-            </a>
+        <a class="btn btn-primary" href="{% url 'post_edit' pk=post.pk %}">
+            <span class="glyphicon glyphicon-pencil"></span>
+        </a>
+
+        <span>&nbsp;</span>
+
+        <a class="btn btn-primary" href="{% url 'post_remove' pk=post.pk %}">
+            <span class="glyphicon glyphicon-remove"></span>
+        </a>
         {% endif %}
     </div>
+
+    <hr>
+
+    <a class="btn btn-default" href="{% url 'add_comment_to_post' pk=post.pk %}">Add comment</a>
+    {% for comment in post.comments.all %}
+        <div class="comment">
+            <div class="date">{{ comment.created_date }}</div>
+                <strong>{{ comment.author }}</strong>
+                <p>{{ comment.text|linebreaks }}</p>
+            </div>
+        </div>
+        {% empty %}
+        <p>No comments here yet :(</p>
+    {% endfor %}
 {% endblock %}
