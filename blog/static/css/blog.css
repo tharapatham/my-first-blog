@@ -4,11 +4,11 @@ h1 a, h2 a {
 }
 body {
     padding-left: 15px;
-    background-color: grey;
+    background-color: lightgrey;
 }
 
 .page-header {
-    background-color: lightgrey;
+    background-color: grey;
     margin-top: 0;
     padding: 20px 20px 20px 40px;
 }
