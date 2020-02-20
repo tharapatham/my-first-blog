@@ -7,14 +7,14 @@
 
         {% if post.published_date %}
             <div class="date">
-                [{{ post.author }}] -- {{ post.published_date }}
+                [<strong>{{ post.author }}</strong>] -- {{ post.published_date }}
             </div>
         {% else %}
             <a class="btn btn-primary" href="{% url 'post_publish' pk=post.pk %}">Publish</a>
             <span class="float-right">&nbsp;</span>
         {% endif %}
 
-        {% if user.is_authenticated %}
+        {% if user.is_authenticated and user == post.author %}
         <a class="btn btn-primary" href="{% url 'post_edit' pk=post.pk %}">
             <span class="glyphicon glyphicon-pencil"></span>
         </a>
@@ -31,13 +31,25 @@
 
     <a class="btn btn-primary" href="{% url 'add_comment_to_post' pk=post.pk %}">Add comment</a>
     {% for comment in post.comments.all %}
+        {% if user.is_authenticated or comment.approved_comment %}
         <div class="comment">
-            <div class="date">{{ comment.created_date }}</div>
-                <strong>{{ comment.author }}</strong>
-                <p>{{ comment.text|linebreaks }}</p>
+            <div class="date">
+            [<strong>{{ comment.author }}</strong>] -- {{ comment.created_date }}
+
+            {% if not comment.approved_comment and user == post.author %}
+                <a class="btn btn-primary" href="{% url 'comment_remove' pk=comment.pk %}">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </a>
+                <a class="btn btn-primary" href="{% url 'comment_approve' pk=comment.pk %}">
+                    <span class="glyphicon glyphicon-ok"></span>
+                </a>
+            {% endif %}
             </div>
+
+            <p>{{ comment.text|linebreaks }}</p>
         </div>
-        {% empty %}
+        {% endif %}
+    {% empty %}
         <p>No comments here yet :(</p>
     {% endfor %}
 {% endblock %}
